@@ -24,4 +24,6 @@ jobs:
           for pr in 2 6; do  # Replace 1, 2, 3 with the desired pull request numbers
             gh pr merge $pr -m
           done
+        env:
+         GH_TOKEN: ${{ github.token }}
         
