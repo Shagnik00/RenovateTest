@@ -18,11 +18,14 @@ jobs:
         run: |
           echo "::set-output name=pulls::$(gh pr list -s open -F json)"
 
+      - name: Set up GitHub CLI
+        run: |
+          echo "env:
+            GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}" > $GITHUB_ENV
+
       - name: Perform Automatic Merge
         run: |
           pulls="${{ steps.pr.outputs.pulls }}"
           for pr in $pulls; do
-            # Additional steps for automatic merge
-            # For example:
-            # gh pr merge $pr --auto
+            gh pr merge $pr --auto
           done
