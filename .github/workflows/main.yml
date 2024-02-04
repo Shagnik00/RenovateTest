@@ -18,11 +18,14 @@ jobs:
         run: |
           echo "::set-output name=pulls::$(gh pr list -s open -F json)"
 
+      - name: Set up GitHub CLI
+        run: |
+          echo "env:
+            GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}" > $GITHUB_ENV
+
       - name: Perform Automatic Merge
         run: |
           pulls="${{ steps.pr.outputs.pulls }}"
-          for pr in 2 6; do  # Replace 1, 2, 3 with the desired pull request numbers
-            gh pr merge $pr -m
+          for pr in $pulls; do
+            gh pr merge $pr --auto
           done
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
